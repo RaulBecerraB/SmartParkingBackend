@@ -1,0 +1,6 @@
+@SmartParkingBackend_HostAddress = http://localhost:5121
+
+GET {{SmartParkingBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
