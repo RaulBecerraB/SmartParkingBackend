@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FBMftGtv0NzWiWIlx8qvA9ePkAdJchjJbxsOC4vSvLU=",
+  "Source": "SmartParkingBackend",
+  "BasePath": "_content/SmartParkingBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
