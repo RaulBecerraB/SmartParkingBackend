@@ -7,7 +7,7 @@ namespace SmartParkingBackend.Controllers.Admin
     [Route("admin")]
     public class AdminParkingController : ControllerBase
     {
-        private static readonly string[] RowNames = new[] { "A", "B", "C", "D" };
+        private static readonly string[] RowNames = new[] { "A", "B", "C", "D", "ASD" };
         private static readonly string[] Statuses = new[] { "active", "offline", "maintenance" };
 
         [HttpGet("parking-status")]
