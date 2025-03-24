@@ -16,21 +16,18 @@ namespace SmartParkingBackend.Models
         public DbSet<ParkingSpot> ParkingSpots { get; set; }
         public DbSet<OccupancyHistory> OccupancyHistories { get; set; }
 
+        // Este método se utiliza solo para herramientas de EF Core (migraciones, etc.)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Este método se ejecutará solo si el contexto no ha sido configurado previamente
             if (!optionsBuilder.IsConfigured)
             {
                 // Obtiene la cadena de conexión desde las variables de entorno
                 string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
                 
-                // Si no se encontró la variable de entorno, usa la cadena por defecto
-                if (string.IsNullOrEmpty(connectionString))
+                if (!string.IsNullOrEmpty(connectionString))
                 {
-                    connectionString = "Server=PC-RAUL\\SQLEXPRESS;Database=SmartParking;Trusted_Connection=True;TrustServerCertificate=True;";
+                    optionsBuilder.UseSqlServer(connectionString);
                 }
-                
-                optionsBuilder.UseSqlServer(connectionString);
             }
         }
         

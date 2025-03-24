@@ -8,8 +8,10 @@ DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Obtener la cadena de conexión desde el archivo .env
+string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 builder.Services.AddDbContext<ParkingContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
