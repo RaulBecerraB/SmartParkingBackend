@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # SQL Server service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SmartParking123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "SmartParking123!" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - smartparking-network
+
+  # API Backend service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - DB_CONNECTION_STRING=Server=sqlserver;Database=SmartParking;User Id=sa;Password=SmartParking123!;TrustServerCertificate=True;
+    volumes:
+      - ./data:/app/data
+    networks:
+      - smartparking-network
+
+volumes:
+  sqlserver_data:
+    driver: local
+
+networks:
+  smartparking-network:
+    driver: bridge 

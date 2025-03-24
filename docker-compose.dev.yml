@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # SQL Server service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SmartParking123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "SmartParking123!" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - smartparking-network-dev
+
+  # API Backend service for development
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - DB_CONNECTION_STRING=Server=sqlserver;Database=SmartParking;User Id=sa;Password=SmartParking123!;TrustServerCertificate=True;
+      # Visual Studio debugging
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      # Disable HTTPS redirection in development
+      - ASPNETCORE_HTTPS_PORT=8081
+      # For hot reload
+      - WATCHPACK_POLLING=true
+    volumes:
+      # Montar el código fuente para hot-reload
+      - .:/app
+      # Excluir los directorios de salida para evitar conflictos
+      - /app/bin
+      - /app/obj
+    networks:
+      - smartparking-network-dev
+
+volumes:
+  sqlserver_data:
+    driver: local
+
+networks:
+  smartparking-network-dev:
+    driver: bridge 
