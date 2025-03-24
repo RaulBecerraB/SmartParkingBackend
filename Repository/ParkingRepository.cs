@@ -21,12 +21,12 @@ namespace SmartParkingBackend.Repository
             return await _context.Parkings.ToListAsync();
         }
 
-        public async Task<Parking> GetParkingByIdAsync(int id)
+        public async Task<Parking?> GetParkingByIdAsync(int id)
         {
             return await _context.Parkings.FindAsync(id);
         }
 
-        public async Task<Parking> GetParkingWithDetailsAsync(int id)
+        public async Task<Parking?> GetParkingWithDetailsAsync(int id)
         {
             return await _context.Parkings
                 .Include(p => p.ParkingRows)
@@ -39,7 +39,7 @@ namespace SmartParkingBackend.Repository
             return await _context.Parkings.AnyAsync(p => p.Id == id);
         }
 
-        public async Task<OccupancyHistory> GetLatestOccupancyHistoryAsync(int parkingId)
+        public async Task<OccupancyHistory?> GetLatestOccupancyHistoryAsync(int parkingId)
         {
             return await _context.OccupancyHistories
                 .Where(h => h.ParkingId == parkingId)
@@ -62,7 +62,7 @@ namespace SmartParkingBackend.Repository
             return history;
         }
 
-        public async Task<ParkingSpot> UpdateParkingSpotStatusAsync(int parkingId, string rowCode, string spotCode, string status)
+        public async Task<ParkingSpot?> UpdateParkingSpotStatusAsync(int parkingId, string rowCode, string spotCode, string status)
         {
             var parking = await GetParkingWithDetailsAsync(parkingId);
             if (parking == null)

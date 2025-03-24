@@ -22,15 +22,19 @@ namespace SmartParkingBackend.Controllers
             _logger = logger;
         }
 
-        // GET: api/parkings?latitude=...&longitude=...
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ParkingDto>>> GetParkingsNearby([FromQuery] double? latitude, [FromQuery] double? longitude)
         {
             var parkings = await _parkingService.GetParkingsNearbyAsync(latitude, longitude);
+            
+            if (parkings == null || !parkings.Any())
+            {
+                return NoContent();
+            }
+            
             return Ok(parkings);
         }
 
-        // GET: api/parkings/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ParkingDetailDto>> GetParkingDetail(int id)
         {
@@ -44,7 +48,6 @@ namespace SmartParkingBackend.Controllers
             return Ok(parkingDetail);
         }
 
-        // GET: api/parkings/{id}/history
         [HttpGet("{id}/history")]
         public async Task<ActionResult<IEnumerable<OccupancyHistoryDto>>> GetParkingHistory(int id)
         {
@@ -58,7 +61,6 @@ namespace SmartParkingBackend.Controllers
             return Ok(history);
         }
 
-        // PUT: api/parkings/{parkingId}/rows/{rowCode}/spots/{spotCode}
         [HttpPut("{parkingId}/rows/{rowCode}/spots/{spotCode}")]
         public async Task<IActionResult> UpdateSpotStatus(
             int parkingId, 
@@ -88,11 +90,5 @@ namespace SmartParkingBackend.Controllers
             
             return Ok(result);
         }
-    }
-
-    // Clase para recibir la solicitud de actualización de estado
-    public class UpdateSpotStatusRequestDto
-    {
-        public string Status { get; set; }
     }
 } 
