@@ -1,6 +1,64 @@
-@SmartParkingBackend_HostAddress = http://localhost:5121
+@baseUrl = https://localhost:7270
+@apiPrefix = api
 
-GET {{SmartParkingBackend_HostAddress}}/weatherforecast/
+
+### INICIALIZACIÓN DE DATOS DE PRUEBA ###
+
+### Inicializar la base de datos con datos de prueba
+POST {{baseUrl}}/{{apiPrefix}}/seed/initialize
+Content-Type: application/json
+
+### Resetear todos los datos de la base de datos
+POST {{baseUrl}}/{{apiPrefix}}/seed/reset
+Content-Type: application/json
+
+
+### ENDPOINTS DE ESTACIONAMIENTO ###
+
+### Obtener todos los estacionamientos (sin parámetros de geolocalización)
+GET {{baseUrl}}/{{apiPrefix}}/parkings
 Accept: application/json
 
-###
+### Obtener estacionamientos cercanos a una ubicación específica
+GET {{baseUrl}}/{{apiPrefix}}/parkings?latitude=40.7128&longitude=-74.0060
+Accept: application/json
+
+### Obtener detalle de un estacionamiento específico (reemplazar {id} con un ID válido de la base de datos)
+GET {{baseUrl}}/{{apiPrefix}}/parkings/1
+Accept: application/json
+
+### Obtener historial de ocupación para un estacionamiento (reemplazar {id} con un ID válido)
+GET {{baseUrl}}/{{apiPrefix}}/parkings/1/history
+Accept: application/json
+
+### Actualizar el estado de un espacio de estacionamiento
+PUT {{baseUrl}}/{{apiPrefix}}/parkings/1/rows/A/spots/01
+Content-Type: application/json
+
+{
+  "status": "Occupied"
+}
+
+### Actualizar el estado de un espacio de estacionamiento a disponible
+PUT {{baseUrl}}/{{apiPrefix}}/parkings/1/rows/A/spots/01
+Content-Type: application/json
+
+{
+  "status": "Available"
+}
+
+### Actualizar el estado de un espacio de estacionamiento a reservado
+PUT {{baseUrl}}/{{apiPrefix}}/parkings/1/rows/A/spots/01
+Content-Type: application/json
+
+{
+  "status": "Reserved"
+}
+
+### Actualizar el estado de un espacio de estacionamiento a fuera de servicio
+PUT {{baseUrl}}/{{apiPrefix}}/parkings/1/rows/A/spots/01
+Content-Type: application/json
+
+{
+  "status": "OutOfService"
+}
