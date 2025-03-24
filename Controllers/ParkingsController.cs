@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SmartParkingBackend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ParkingsController : ControllerBase
     {
         private readonly IParkingService _parkingService;

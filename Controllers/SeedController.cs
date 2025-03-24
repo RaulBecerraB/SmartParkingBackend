@@ -9,7 +9,7 @@ using SmartParkingBackend.Services;
 namespace SmartParkingBackend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class SeedController : ControllerBase
     {
         private readonly ISeedService _seedService;
