@@ -32,7 +32,8 @@ namespace SmartParkingBackend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalAvailable = table.Column<int>(type: "int", nullable: false),
+                    OccupiedSpots = table.Column<int>(type: "int", nullable: false),
+                    TotalSpots = table.Column<int>(type: "int", nullable: false),
                     ParkingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

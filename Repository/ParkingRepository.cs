@@ -78,7 +78,7 @@ namespace SmartParkingBackend.Repository
 
             spot.Status = status;
             _context.ParkingSpots.Update(spot);
-            
+
             return spot;
         }
 
@@ -90,9 +90,26 @@ namespace SmartParkingBackend.Repository
                 .CountAsync();
         }
 
+        public async Task<int> CountTotalSpotsAsync(int parkingId)
+        {
+            return await _context.ParkingSpots
+                .Include(s => s.ParkingRow)
+                .Where(s => s.ParkingRow.ParkingId == parkingId)
+                .CountAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return (await _context.SaveChangesAsync() > 0);
         }
+
+        public async Task<IEnumerable<Parking>> GetAllParkingsWithDetailsAsync()
+        {
+            return await _context.Parkings
+                .Include(p => p.ParkingRows)
+                    .ThenInclude(r => r.ParkingSpots)
+                .Include(p => p.OccupancyHistories)
+                .ToListAsync();
+        }
     }
-} 
+}

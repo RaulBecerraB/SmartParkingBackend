@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NMu5cUZ/72E=",
+  "dgSpecHash": "VAFpruEvabThG8ZAuEwPCAJCus5NAwlEw2H2ZsP2LxDQ+y7Toy6TuBCOwmpeVm7rRSPfF9Srxz8lSL8YVKgnvA==",
   "success": true,
-  "projectFilePath": "C:\\Encoding\\ASP\\SmartParkingBackend\\SmartParkingBackend.csproj",
+  "projectFilePath": "C:\\ENCODING\\ASP_dotNET\\SmartParkingBackend\\SmartParkingBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\raulb\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\raulb\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

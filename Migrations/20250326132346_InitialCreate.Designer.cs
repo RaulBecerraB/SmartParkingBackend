@@ -12,7 +12,7 @@ using SmartParkingBackend.Models;
 namespace SmartParkingBackend.Migrations
 {
     [DbContext(typeof(ParkingContext))]
-    [Migration("20250324081306_InitialCreate")]
+    [Migration("20250326132346_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,13 +33,16 @@ namespace SmartParkingBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("OccupiedSpots")
+                        .HasColumnType("int");
+
                     b.Property<int>("ParkingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalAvailable")
+                    b.Property<int>("TotalSpots")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

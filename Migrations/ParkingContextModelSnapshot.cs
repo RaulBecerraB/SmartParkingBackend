@@ -30,13 +30,16 @@ namespace SmartParkingBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("OccupiedSpots")
+                        .HasColumnType("int");
+
                     b.Property<int>("ParkingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalAvailable")
+                    b.Property<int>("TotalSpots")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

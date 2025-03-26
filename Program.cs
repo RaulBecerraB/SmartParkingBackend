@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
 // Add services to the container.
-builder.Services.AddDbContext<ParkingContext>(options => 
+builder.Services.AddDbContext<ParkingContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Registrar repositorios
@@ -35,10 +35,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ParkingContext>();
-    
+
     // Asegurarnos de crear la base de datos si no existe
     db.Database.EnsureCreated();
-    
+
     // Aplicar cualquier migración pendiente
     if (db.Database.GetPendingMigrations().Any())
     {
@@ -52,11 +52,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else 
+else
 {
     // En producción también queremos Swagger disponible
     app.UseSwagger();
-    app.UseSwaggerUI(c => 
+    app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking API v1");
         c.RoutePrefix = "swagger";

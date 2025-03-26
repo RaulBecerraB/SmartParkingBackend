@@ -6,13 +6,13 @@ namespace SmartParkingBackend.Models
     public class ParkingRow
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        
+        public required string Code { get; set; }
+
         // Clave foránea
         public int ParkingId { get; set; }
-        public Parking Parking { get; set; }
-        
+        public required Parking Parking { get; set; }
+
         // Relación
-        public ICollection<ParkingSpot> ParkingSpots { get; set; }
+        public required ICollection<ParkingSpot> ParkingSpots { get; set; }
     }
-} 
+}

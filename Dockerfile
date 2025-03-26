@@ -1,25 +1,16 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+#Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["SmartParkingBackend.csproj", "./"]
-RUN dotnet restore "SmartParkingBackend.csproj"
+WORKDIR /source
 COPY . .
-WORKDIR "/src/"
-RUN dotnet build "SmartParkingBackend.csproj" -c Release -o /app/build
+RUN dotnet restore "SmartParkingBackend.csproj" --disable-parallel
+RUN dotnet publish "SmartParkingBackend.csproj" -c release -o /app --no-restore
 
-FROM build AS publish
-RUN dotnet publish "SmartParkingBackend.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+#Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-focal
 WORKDIR /app
-COPY --from=publish /app/publish .
-# Crear directorio para almacenar el .env 
-RUN mkdir -p /app/data
-# Establecer variable de entorno para indicar que estamos en producción
-ENV ASPNETCORE_ENVIRONMENT=Production
+COPY --from=build /app ./
 
-ENTRYPOINT ["dotnet", "SmartParkingBackend.dll"] 
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "SmartParkingBackend.dll"]
+
+
