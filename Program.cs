@@ -38,18 +38,32 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ParkingContext>();
+    var maxRetries = 5;
+    var retryDelay = 10; // segundos
+    var retryCount = 0;
 
-    try
+    while (retryCount < maxRetries)
     {
-        // Intentar aplicar migraciones
-        db.Database.Migrate();
-    }
-    catch (Exception)
-    {
-        // Si hay un error, probablemente las tablas ya existen pero no hay historial de migraciones
-        // En este caso, eliminamos la base de datos y la recreamos
-        db.Database.EnsureDeleted();
-        db.Database.Migrate();
+        try
+        {
+            // Intentar aplicar migraciones
+            db.Database.Migrate();
+            break;
+        }
+        catch (Exception)
+        {
+            retryCount++;
+            if (retryCount == maxRetries)
+            {
+                // Si hay un error, probablemente las tablas ya existen pero no hay historial de migraciones
+                // En este caso, eliminamos la base de datos y la recreamos
+                db.Database.EnsureDeleted();
+                db.Database.Migrate();
+                break;
+            }
+            Console.WriteLine($"Retrying database connection in {retryDelay} seconds... (Attempt {retryCount}/{maxRetries})");
+            Thread.Sleep(retryDelay * 1000);
+        }
     }
 }
 
