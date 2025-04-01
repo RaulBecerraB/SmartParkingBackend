@@ -1,6 +1,7 @@
 services:
   web:
     build: .
+    platform: linux/arm64
     ports:
       - "5000:80"
       - "5001:443"
@@ -12,6 +13,7 @@ services:
 
   db:
     image: mysql:8.0
+    platform: linux/arm64
     environment:
       MYSQL_ROOT_PASSWORD: "admin1"
       MYSQL_DATABASE: "SmartParking"
