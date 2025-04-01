@@ -23,14 +23,14 @@ namespace SmartParkingBackend.Models
             {
                 // Obtiene la cadena de conexión desde las variables de entorno
                 string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-                
+
                 if (!string.IsNullOrEmpty(connectionString))
                 {
-                    optionsBuilder.UseSqlServer(connectionString);
+                    optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
                 }
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuración de relaciones con Fluent API si es necesario.
@@ -50,4 +50,4 @@ namespace SmartParkingBackend.Models
                 .HasForeignKey(h => h.ParkingId);
         }
     }
-} 
+}

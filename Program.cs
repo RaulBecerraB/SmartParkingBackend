@@ -1,5 +1,6 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
 using SmartParkingBackend.Models;
 using SmartParkingBackend.Repository;
 using SmartParkingBackend.Services;
@@ -12,11 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Obtener la cadena de conexión desde el archivo .env o la configuración
 string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
     builder.Configuration.GetConnectionString("DefaultConnection") ??
-    "Server=db;Database=SmartParking;User=sa;Password=TuContraseña123!;TrustServerCertificate=True;";
+    "Server=localhost;Port=3306;Database=SmartParking;User=root;Password=admin1;";
 
 // Add services to the container.
 builder.Services.AddDbContext<ParkingContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 // Registrar repositorios
 builder.Services.AddScoped<IParkingRepository, ParkingRepository>();
