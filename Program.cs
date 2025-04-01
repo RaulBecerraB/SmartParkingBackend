@@ -9,8 +9,10 @@ DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Obtener la cadena de conexión desde el archivo .env
-string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+// Obtener la cadena de conexión desde el archivo .env o la configuración
+string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
+    builder.Configuration.GetConnectionString("DefaultConnection") ??
+    "Server=db;Database=SmartParking;User=sa;Password=TuContraseña123!;TrustServerCertificate=True;";
 
 // Add services to the container.
 builder.Services.AddDbContext<ParkingContext>(options =>
@@ -36,32 +38,27 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ParkingContext>();
 
-    // Asegurarnos de crear la base de datos si no existe
-    db.Database.EnsureCreated();
-
-    // Aplicar cualquier migración pendiente
-    if (db.Database.GetPendingMigrations().Any())
+    try
     {
+        // Intentar aplicar migraciones
+        db.Database.Migrate();
+    }
+    catch (Exception)
+    {
+        // Si hay un error, probablemente las tablas ya existen pero no hay historial de migraciones
+        // En este caso, eliminamos la base de datos y la recreamos
+        db.Database.EnsureDeleted();
         db.Database.Migrate();
     }
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    // En producción también queremos Swagger disponible
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking API v1");
-        c.RoutePrefix = "swagger";
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking API v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 
