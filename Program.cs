@@ -12,9 +12,7 @@ DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Obtener la cadena de conexión desde el archivo .env o la configuración
-string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
-    builder.Configuration.GetConnectionString("DefaultConnection") ??
-    "Server=localhost;Port=3306;Database=SmartParking;User=root;Password=admin1;";
+string connectionString = "Server=localhost;Port=3306;Database=SmartParking;User=root;Password=admin1;";
 
 // Add services to the container.
 builder.Services.AddDbContext<ParkingContext>(options =>
