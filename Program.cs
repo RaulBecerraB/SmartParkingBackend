@@ -4,6 +4,7 @@ using Pomelo.EntityFrameworkCore.MySql;
 using SmartParkingBackend.Models;
 using SmartParkingBackend.Repository;
 using SmartParkingBackend.Services;
+using SmartParkingBackend.Middleware;
 
 // Cargar variables de entorno desde el archivo .env
 DotNetEnv.Env.Load();
@@ -82,6 +83,7 @@ app.UseAuthorization();
 // Agregar middleware personalizados
 app.UseMiddleware<ValidateIdMiddleware>();
 app.UseMiddleware<ValidateParkingSpotMiddleware>();
+app.UseMiddleware<RateLimitMiddleware>();
 
 app.MapControllers();
 
