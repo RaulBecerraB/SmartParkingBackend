@@ -11,11 +11,24 @@ DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Obtener la cadena de conexión desde el archivo .env o la configuración
-string connectionString = "Server=localhost;Port=3306;Database=SmartParking;User=root;Password=admin1;";
+string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
+    builder.Configuration.GetConnectionString("DefaultConnection") ??
+    "Server=localhost;Port=3306;Database=SmartParking;User=root;Password=admin1;";
 
 // Add services to the container.
 builder.Services.AddDbContext<ParkingContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+{
+    try
+    {
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al conectar con la base de datos: {ex.Message}");
+        Console.WriteLine("Asegúrese de que MySQL esté corriendo y la cadena de conexión sea correcta.");
+        throw;
+    }
+});
 
 // Registrar repositorios
 builder.Services.AddScoped<IParkingRepository, ParkingRepository>();
