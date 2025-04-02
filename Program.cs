@@ -79,6 +79,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// Agregar middleware personalizados
+app.UseMiddleware<ValidateIdMiddleware>();
+app.UseMiddleware<ValidateParkingSpotMiddleware>();
+
 app.MapControllers();
 
 app.Run();
